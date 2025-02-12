@@ -73,7 +73,7 @@ class _AddressScreenState extends State<AddressScreen> {
       print("ADD ADDRESS ERROR::::: $error");
       final snackBar = CustomSnackbar.build(
         message: error,
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -82,7 +82,7 @@ class _AddressScreenState extends State<AddressScreen> {
       if (createAddress != null) {
         final snackBar = CustomSnackbar.build(
           message: "Address added successfully!",
-          backgroundColor: AppThemeColor.buttonColor,
+          backgroundColor: AppThemeColor.primaryColor,
           onPressed: () {
           },
         );

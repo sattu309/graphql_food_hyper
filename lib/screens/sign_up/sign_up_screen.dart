@@ -84,31 +84,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showAddToCartPopup(context,"${error}");
       // final snackBar = CustomSnackbar.build(
       //   message: error,
-      //   backgroundColor: AppThemeColor.buttonColor,
+      //   backgroundColor: AppThemeColor.primaryColor,
       // );
       // ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       final Map<String, dynamic>? createLogin = result.data?['registerUser'];
       if (createLogin != null) {
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        var map = {
-          "authToken": createLogin['authToken'],
-          "id": createLogin['user']['id'].toString(),
-          "username": createLogin['user']['username'].toString(),
-          "email": createLogin['user']['email'].toString(),
-          "firstName": createLogin['user']['firstName'].toString(),
-          "lastName": createLogin['user']['lastName'].toString(),
-        };
-        pref.setString("auth_token", jsonEncode(map));
+        // SharedPreferences pref = await SharedPreferences.getInstance();
+        // var map = {
+        //   "authToken": createLogin['authToken'],
+        //   "id": createLogin['user']['id'].toString(),
+        //   "username": createLogin['user']['username'].toString(),
+        //   "email": createLogin['user']['email'].toString(),
+        //   "firstName": createLogin['user']['firstName'].toString(),
+        //   "lastName": createLogin['user']['lastName'].toString(),
+        // };
+        // pref.setString("auth_token", jsonEncode(map));
         log("User Registration information ${createLogin['user'].toString()}");
-        // final snackBar = CustomSnackbar.build(
-        //   message: "Register successfully!",
-        //   backgroundColor: AppThemeColor.buttonColor,
-        //   onPressed: () {
-        //   },
-        // );
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        Get.offAll(()=>const MinimalExample());
+        // Get.offAll(()=>const MinimalExample());
+        Get.offAll(()=>const LoginPage());
       } else {
         print('Register errors: Invalid response data');
       }
@@ -126,17 +120,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Scaffold(
         body:
         Container(
-            color: AppThemeColor.buttonColor,
+          width: width,
+            color: Colors.white,
             child:
             Stack(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: height*.10,),
-                    Padding(
-                      padding: const EdgeInsets.all(50.0),
-                      child: Image.asset("assets/images/food_logo.png",),
+                    addHeight(18),
+                    // SizedBox(height: height*.1,),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(50.0),
+                        child: Image.asset("assets/images/food_logo.png",),
+                      ),
                     ),
                   ],
                 ),
@@ -145,8 +143,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child:   Container(
                     width: width,
                     //padding: EdgeInsets.symmetric(horizontal: 35,vertical: 7),
+
                     decoration: const BoxDecoration(
-                      color: Colors.white,
+                      color: Color(0xfff75f11),
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [ Colors.white,Color(0xfffc8907),],
+                        // colors: [Color(0xfffc8907), Color(0xfff75f11)],
+                      ),
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(20),
                         topLeft: Radius.circular(20),
@@ -169,19 +174,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            addHeight(20),
+                            addHeight(10),
                              Text("Sign Up",
-                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: AppThemeColor.buttonColor,),),
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Colors.black,),),
                             addHeight(5),
                              Text("Please Sign Up to continue",
-                              style: TextStyle(fontWeight: FontWeight.w400,fontSize: 15,color: AppThemeColor.buttonColor),),
+                              style: TextStyle(fontWeight: FontWeight.w400,fontSize: 15,color: Colors.black),),
                             addHeight(15),
                             const Text(
                               "FIRST NAME",
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 13,
-                                  color: Colors.grey),
+                                  color: Colors.black),
                             ),
                             addHeight(2),
                             CommonTextFieldWidget(
@@ -198,7 +203,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 13,
-                                  color: Colors.grey),
+                                  color: Colors.black),
                             ),
                             addHeight(2),
                             CommonTextFieldWidget(
@@ -215,7 +220,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 13,
-                                  color: Colors.grey),
+                                  color: Colors.black),
                             ),
                             addHeight(2),
                             CommonTextFieldWidget(
@@ -234,7 +239,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 13,
-                                  color: Colors.grey),
+                                  color: Colors.black),
                             ),
                             addHeight(2),
                             CommonTextFieldWidget(
@@ -266,7 +271,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   Text("Already have an account?",
-                                    style: TextStyle(fontWeight: FontWeight.w400,fontSize: 15,color: AppThemeColor.buttonColor),),
+                                    style: TextStyle(fontWeight: FontWeight.w400,fontSize: 15,color: AppThemeColor.primaryColor),),
                                 ],
                               ),
                             ),
@@ -307,7 +312,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ],
                             ),
-                            addHeight(20),
+                            addHeight(10),
 
 
                           ],

@@ -5,7 +5,7 @@ import 'constants.dart';
 class AppTheme {
   static ThemeData lightTheme(BuildContext context) {
     return ThemeData(
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: Colors.transparent,
       useMaterial3: false,
       fontFamily: "IBM Plex Sans",
       appBarTheme: const AppBarTheme(
@@ -17,6 +17,7 @@ class AppTheme {
         bodyLarge: TextStyle(color: kTextColor),
         bodyMedium: TextStyle(color: kTextColor),
         bodySmall: TextStyle(color: kTextColor),
+        titleSmall: TextStyle(color: titleColor,fontSize: 15,fontWeight: FontWeight.w500),
         headlineMedium: TextStyle(color: kTextColor),
       ),
       inputDecorationTheme: const InputDecorationTheme(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shop_app/helper/apptheme_color.dart';
 import 'package:shop_app/screens/new_common_tab.dart';
 import '../../helper/dimentions.dart';
@@ -18,93 +19,6 @@ import '../../helper/dimentions.dart';
 
 class _ThankYouScreenState extends State<ThankYouScreen> {
 
-  final fetchMyOrders = """
- query Orders {
-    orders{
-        edges {
-            node {
-                id
-                status
-                paymentMethod
-                databaseId
-                date
-                orderNumber
-                total
-                subtotal
-                lineItems {
-                    edges {
-                        node {
-                            id
-                            orderId
-                            productId
-                            quantity
-                            subtotal
-                            total
-                            product {
-                                node {
-                                    productId
-                                    name
-                                    featuredImage {
-                                        node {
-                                            sourceUrl
-                                        }
-                                    }
-                                    ... on VariableProduct {
-                                        databaseId
-                                        name
-                                        price
-                                        type
-                                        salePrice
-                                        regularPrice
-                                    }
-                                    ... on SimpleProduct {
-                                        databaseId
-                                        name
-                                        price
-                                        type
-                                        regularPrice
-                                        salePrice
-                                    }
-                                }
-                            }
-                            variation {
-                                node {
-                                    databaseId
-                                    name
-                                    price
-                                    regularPrice
-                                    salePrice
-                                    attributes {
-                                        edges {
-                                            node {
-                                                value
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                billing {
-                    address1
-                    address2
-                    city
-                    company
-                    country
-                    email
-                    firstName
-                    lastName
-                    phone
-                    postcode
-                    state
-                }
-            }
-        }
-    }
-}
-
-""";
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -120,25 +34,27 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: height * .08,
-                ),
-                Image(
-                  height: height * .25,
-                  width: width,
-                  image:  const AssetImage("assets/images/thankyou.png"),
-                  color: AppThemeColor.buttonColor,
-                ),
-                SizedBox(
                   height: height * .04,
                 ),
+                Lottie.asset('assets/images/oPlaced.json'),
+                // Image(
+                //   height: height * .25,
+                //   width: width,
+                //   image:  const AssetImage("assets/images/thankyou.png"),
+                //   color: AppThemeColor.primaryColor,
+                // ),
+                // SizedBox(
+                //   height: height * .01,
+                // ),
                 const Text(
-                  "Thank You!",
+                  "Thank You!", style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(
                   height: height * .005,
                 ),
                 const Text(
                   "Your order has been successfully placed",
+                  style: TextStyle(fontSize: 14),
                 ),
                 SizedBox(
                   height: height * .04,
@@ -161,13 +77,13 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                               children: [
                                 Text("PaymentType:",
                                     style: TextStyle(
-                                        color: AppThemeColor.buttonColor,
+                                        color: AppThemeColor.primaryColor,
                                         fontSize: AddSize.font16,
                                         fontWeight: FontWeight.w500)),
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 5,vertical:3),
                                   decoration: BoxDecoration(
-                                    color: AppThemeColor.buttonColor,
+                                    color: AppThemeColor.primaryColor,
                                     borderRadius: BorderRadius.circular(3),
                                   ),
                                   child: Text(
@@ -187,11 +103,11 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                               children: [
                                 Text("Order ID:",
                                     style: TextStyle(
-                                        color: AppThemeColor.buttonColor,
+                                        color: AppThemeColor.primaryColor,
                                         fontSize: AddSize.font16,
                                         fontWeight: FontWeight.w500)),
                                 Text(
-                                  widget.orderId,
+                                  "#${widget.orderId}",
                                   style: TextStyle(
                                       color: Colors.grey.shade500,
                                       fontSize: AddSize.font14,
@@ -206,7 +122,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                               children: [
                                 Text("Date:",
                                     style: TextStyle(
-                                        color: AppThemeColor.buttonColor,
+                                        color: AppThemeColor.primaryColor,
                                         fontSize: AddSize.font16,
                                         fontWeight: FontWeight.w500)),
                                 Text(
@@ -224,7 +140,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                               children: [
                                 Text("Subtotal:",
                                     style: TextStyle(
-                                        color: AppThemeColor.buttonColor,
+                                        color: AppThemeColor.primaryColor,
                                         fontSize: AddSize.font16,
                                         fontWeight: FontWeight.w500)),
                                 Text(
@@ -246,14 +162,14 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                               children: [
                                 Text("Total:",
                                     style: TextStyle(
-                                        color: AppThemeColor.buttonColor,
+                                        color: AppThemeColor.primaryColor,
                                         fontSize: AddSize.font16,
                                         fontWeight: FontWeight.w500)),
                                 Text(
                                     widget.orderTotal,
                                     style: TextStyle(
-                                        color: Colors.grey.shade500,
-                                        fontSize: AddSize.font14,
+                                        color: Colors.grey.shade700,
+                                        fontSize: AddSize.font16,
                                         fontWeight: FontWeight.w500)),
                               ]),
                         ]),
@@ -274,7 +190,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.maxFinite, 60),
-                    backgroundColor: AppThemeColor.buttonColor,
+                    backgroundColor: AppThemeColor.primaryColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AddSize.size10)),

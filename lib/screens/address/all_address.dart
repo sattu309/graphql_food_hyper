@@ -60,7 +60,7 @@ class _AllAddressPageState extends State<AllAddressPage> {
           if(result.isLoading){
             return  Center(
               child: CircularProgressIndicator(
-                color: AppThemeColor.buttonColor,
+                color: AppThemeColor.primaryColor,
               ),
             );
           }
@@ -122,7 +122,7 @@ class _AllAddressPageState extends State<AllAddressPage> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 14,
-                                                color: AppThemeColor.buttonColor),
+                                                color: AppThemeColor.primaryColor),
                                           ),
                                         ),
                                         const VerticalDivider(
@@ -142,7 +142,7 @@ class _AllAddressPageState extends State<AllAddressPage> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 14,
-                                                color: AppThemeColor.buttonColor),
+                                                color: AppThemeColor.primaryColor),
                                           ),
                                         ),
                                       ],
@@ -167,7 +167,7 @@ class _AllAddressPageState extends State<AllAddressPage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Checkbox(
-                                        activeColor: AppThemeColor.buttonColor,
+                                        activeColor: AppThemeColor.primaryColor,
                                         value: selectedIndex == index,
                                         onChanged: (value) {
 
@@ -254,7 +254,7 @@ class _AllAddressPageState extends State<AllAddressPage> {
       print("DELETE ADDRESS ERROR::::: $error");
       final snackBar = CustomSnackbar.build(
         message: error,
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -263,7 +263,7 @@ class _AllAddressPageState extends State<AllAddressPage> {
       if (deleteAddress != null) {
         final snackBar = CustomSnackbar.build(
           message: deleteAddress['message'].toString(),
-          backgroundColor: AppThemeColor.buttonColor,
+          backgroundColor: AppThemeColor.primaryColor,
           onPressed: () {},
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);

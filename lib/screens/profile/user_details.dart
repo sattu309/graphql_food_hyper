@@ -12,6 +12,9 @@ import 'package:shop_app/helper/heigh_width.dart';
 import '../../controllers/session_controller.dart';
 import '../../helper/apptheme_color.dart';
 import '../../helper/common_textfiled.dart';
+import '../../helper/snackbar_popup.dart';
+import '../login_flow/login_page.dart';
+import 'components/custom_loader.dart';
 import 'components/profile_pic.dart';
 
 class UserProfile extends StatefulWidget {
@@ -24,9 +27,12 @@ class UserProfile extends StatefulWidget {
 class _UserProfileState extends State<UserProfile> {
   final userDataController = Get.put(SessionController());
   final formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: (){
         FocusManager.instance.primaryFocus!.unfocus();
@@ -39,8 +45,11 @@ class _UserProfileState extends State<UserProfile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  addHeight(height*.04),
-                  ProfilePic(),
+                  addHeight(height*.06),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ProfilePic1(),
+                  ),
                   addHeight(50),
                   Form(
                     key: formKey,
@@ -52,7 +61,7 @@ class _UserProfileState extends State<UserProfile> {
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 20,
-                            color: AppThemeColor.buttonColor),
+                            color: AppThemeColor.primaryColor),
                       ),
                       addHeight(20),
                       const Text(
@@ -100,6 +109,7 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                       addHeight(3),
                       CommonTextFieldWidget1(
+                        readOnly: true,
                         controller: userDataController.emailController,
                         keyboardType: TextInputType.emailAddress,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -108,16 +118,29 @@ class _UserProfileState extends State<UserProfile> {
                           RequiredValidator(errorText: 'Enter Your Email'),
                         ]),
                       ),
+
                       addHeight(30),
+
+                      isLoading == true ?  const CustomLoader():
                       CommonButtonGreen(
-                        title: "UPDATE",
-                        onPressed: () {
-                          userDetailsUpdateMutation(
-                              id: userDataController.userId.value,
-                              firstName: userDataController.nameController.text,
-                              lastName: userDataController.lastController.text,
-                              email: userDataController.emailController.text);
-                        },
+                        title:"UPDATE",
+                        onPressed: () async {
+
+                          if(formKey.currentState!.validate()){
+                            setState(() {
+                              isLoading = true;
+                            });
+                           await userDetailsUpdateMutation(
+                                id: userDataController.userId.value,
+                                firstName: userDataController.nameController.text,
+                                lastName: userDataController.lastController.text,
+                                email: userDataController.emailController.text);
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+
+                          },
                       )
                     ],
                   ))
@@ -129,7 +152,7 @@ class _UserProfileState extends State<UserProfile> {
       ),
     );
   }
-  userDetailsUpdateMutation(
+  Future<void> userDetailsUpdateMutation(
       {
         required String id,
         required String firstName,
@@ -182,10 +205,11 @@ class _UserProfileState extends State<UserProfile> {
     } else {
       final Map<String, dynamic>? updateUserInfo = result.data?['updateUser'];
       if (updateUserInfo != null) {
-        showAddToCartPopup(context,"Updated Successfully");
+        showSnackBarView(context, "Updated Successfully",Colors.black);
+        // showAddToCartPopup(context,"Updated Successfully");
         SharedPreferences pref = await SharedPreferences.getInstance();
         var map = {
-          "authToken": updateUserInfo['user']['authToken'].toString(),
+          "authToken": updateUserInfo['user']['jwtAuthToken'].toString(),
           "id": updateUserInfo['user']['id'].toString(),
           "username": updateUserInfo['user']['username'].toString(),
           "email": updateUserInfo['user']['email'].toString(),
@@ -194,13 +218,6 @@ class _UserProfileState extends State<UserProfile> {
         };
         pref.setString("auth_token", jsonEncode(map));
         log("SAVED USER INFORMATION ${pref.getString("auth_token").toString()}");
-        // final snackBar = CustomSnackbar.build(
-        //   message: "Login successfully!",
-        //   backgroundColor: AppThemeColor.buttonColor,
-        //   onPressed: () {
-        //   },
-        // );
-        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         print('UPDATE PROFILE ERROR: Invalid response data');
       }

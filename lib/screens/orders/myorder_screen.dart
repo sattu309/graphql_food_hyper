@@ -5,9 +5,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:shop_app/constants.dart';
 import 'package:shop_app/helper/heigh_width.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../helper/apptheme_color.dart';
 import '../../helper/dimentions.dart';
+import '../../theme.dart';
 import 'order_details.dart';
 
 class MyOrdersOfMart extends StatefulWidget {
@@ -122,26 +125,41 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
 }
 
 """;
+
+  void sendEmail() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: "satyamrathore309@gmail.com",
+      query: 'subject=Hello%20from%20Flutter',
+    );
+    await launch(params.toString());
+  }
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return DefaultTabController(
         length: 3,
         child: Scaffold(
           backgroundColor: Colors.white,
             appBar:AppBar(
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
-              leadingWidth: 20,
-              title: Text(
-                "My Orders",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+              // leadingWidth: 10,
+              title: Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  "My Orders",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
               actions: [
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.only(right: 20,top: 10,bottom: 10),
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
@@ -150,7 +168,7 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         isDense: true,
-                        hint: Icon(Icons.filter_alt_off),
+                        hint: Icon(Icons.filter_alt_off,size: 16,),
                         isExpanded: false,
                         style: const TextStyle(
                           color: Color(0xFF697164),
@@ -184,67 +202,67 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                   ),
                 )
               ],
-              bottom: TabBar(
-                padding: EdgeInsets.all(5),
-                dividerColor: Colors.white,
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicatorColor: AppThemeColor.buttonColor,
-                indicatorPadding: const EdgeInsets.symmetric(horizontal: 15),
-                labelColor: AppThemeColor.buttonColor,
-                unselectedLabelColor: Color(0xff1A2E33),
-                onTap: (value) {
-                  setState(() {
-                    currentDrawer = value;  // Update the currentDrawer based on the selected tab
-                  });
-                },
-                tabs: [
-                  Tab(
-                    child: Text(
-                      "Active",
-                      style: currentDrawer == 0
-                          ? TextStyle(
-                          color: AppThemeColor.buttonColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)
-                          : const TextStyle(
-                          color: Color(0xff1A2E33),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      "Completed",
-                      style: currentDrawer == 1
-                          ? TextStyle(
-                          color: AppThemeColor.buttonColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)
-                          : const TextStyle(
-                          color: Color(0xff1A2E33),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                  Tab(
-                    child: Text(
-                      "Cancelled",
-                      style: currentDrawer == 2
-                          ? TextStyle(
-                          color: AppThemeColor.buttonColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600)
-                          : const TextStyle(
-                          color: Color(0xff1A2E33),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ],
-              ),
+              // bottom: TabBar(
+              //   padding: EdgeInsets.all(5),
+              //   dividerColor: Colors.white,
+              //   indicatorSize: TabBarIndicatorSize.tab,
+              //   indicatorColor: AppThemeColor.primaryColor,
+              //   indicatorPadding: const EdgeInsets.symmetric(horizontal: 15),
+              //   labelColor: AppThemeColor.primaryColor,
+              //   unselectedLabelColor: Color(0xff1A2E33),
+              //   onTap: (value) {
+              //     setState(() {
+              //       currentDrawer = value;  // Update the currentDrawer based on the selected tab
+              //     });
+              //   },
+              //   tabs: [
+              //     Tab(
+              //       child: Text(
+              //         "Active",
+              //         style: currentDrawer == 0
+              //             ? TextStyle(
+              //             color: AppThemeColor.primaryColor,
+              //             fontSize: 14,
+              //             fontWeight: FontWeight.w600)
+              //             : const TextStyle(
+              //             color: Color(0xff1A2E33),
+              //             fontSize: 14,
+              //             fontWeight: FontWeight.w500),
+              //       ),
+              //     ),
+              //     Tab(
+              //       child: Text(
+              //         "Completed",
+              //         style: currentDrawer == 1
+              //             ? TextStyle(
+              //             color: AppThemeColor.primaryColor,
+              //             fontSize: 14,
+              //             fontWeight: FontWeight.w600)
+              //             : const TextStyle(
+              //             color: Color(0xff1A2E33),
+              //             fontSize: 14,
+              //             fontWeight: FontWeight.w500),
+              //       ),
+              //     ),
+              //     Tab(
+              //       child: Text(
+              //         "Cancelled",
+              //         style: currentDrawer == 2
+              //             ? TextStyle(
+              //             color: AppThemeColor.primaryColor,
+              //             fontSize: 14,
+              //             fontWeight: FontWeight.w600)
+              //             : const TextStyle(
+              //             color: Color(0xff1A2E33),
+              //             fontSize: 14,
+              //             fontWeight: FontWeight.w500),
+              //       ),
+              //     ),
+              //   ],
+              // ),
             ),
             body: Query(
-            options: QueryOptions(document: gql(fetchMyOrders)),
+            options: QueryOptions(document: gql(fetchMyOrders),fetchPolicy: FetchPolicy.noCache,),
               builder: (QueryResult result,
               {Refetch? refetch, FetchMore? fetchMore}) {
                 if (result.hasException) {
@@ -253,7 +271,7 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                 if (result.isLoading) {
                   return Center(
                       child: CircularProgressIndicator(
-                        color: AppThemeColor.buttonColor,
+                        color: AppThemeColor.primaryColor,
                       ));
                 }
                 final myOrderData = result.data?['orders']['edges'];
@@ -262,7 +280,7 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                   TabBarView(
                     children: [
                       ListView.builder(
-                          padding: const EdgeInsets.only(bottom: 50),
+                          padding: const EdgeInsets.only(bottom: 70,left: 10,right: 10),
                           shrinkWrap: true,
                           itemCount: myOrderData.length,
                           itemBuilder: (BuildContext, index) {
@@ -291,24 +309,22 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                                   ));
                                 },
                                 child: Container(
-                                    margin: EdgeInsets.symmetric(vertical: 3,
+                                    margin: EdgeInsets.symmetric(vertical: 4,
                                         horizontal: 10),
-                                    padding: EdgeInsets.symmetric(vertical: 10,
+                                    padding: EdgeInsets.symmetric(vertical: 5,
                                         horizontal: 8),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
-                                      border: Border.all(color: Colors.grey.shade100)
-                                      // boxShadow: [
-                                      //   BoxShadow(
-                                      //       color: Colors.white,
-                                      //       offset: Offset(2, 2,),
-                                      //       blurRadius: 5,
-                                      //       spreadRadius: 3
-                                      //
-                                      //     // spreadRadius: 2.0,
-                                      //   ),
-                                      // ],
+                                      border: Border.all(color: Colors.grey.shade100),
+                                        boxShadow: [
+                                    BoxShadow(
+                                    offset: const Offset(2, 2),
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    color: Colors.black
+                                        .withOpacity(0.10))
+                                ],
 
                                     ),
                                     child:
@@ -327,79 +343,106 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                                                     crossAxisAlignment: CrossAxisAlignment
                                                         .start,
                                                     children: [
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Expanded(
-                                                            child: Text(
-                                                              "ORDER ID",
-                                                              style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color: Color(0xff9B9B9B)),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              "DATE",
-                                                              style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color:Color(0xff9B9B9B)),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            "",
-                                                            style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color:Color(0xff9B9B9B)),
-                                                          ),
-
-                                                        ],
-                                                      ),
+                                                       Text(
+                                                         "ORDER ID",
+                                                         style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color: Color(0xff9B9B9B)),
+                                                       ),
+                                                       Text(
+                                                         "#${paymentData['orderNumber']}",
+                                                         style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color:Color(0xff9B9B9B)),
+                                                       ),
                                                       // addHeight(4),
-                                                      Row(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        children: [
-                                                          Expanded(
-                                                            child: Text(
-                                                              "#${paymentData['orderNumber']}",
-                                                                style: TextStyle(fontSize:13,fontWeight:FontWeight.w500,color: Color(0xff1A2E33),)
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            child: Text(
-                                                              formattedDate.toString(),
-                                                              style: TextStyle(fontSize:13,fontWeight:FontWeight.w500,color: Color(0xff1A2E33),)
-                                                            ),
-                                                          ),
-                                                          Container(
-                                                            padding: EdgeInsets.symmetric(horizontal: 4,vertical: 2),
-                                                            // margin: EdgeInsets.symmetric(horizontal: 4,vertical: 2),
-                                                            decoration: BoxDecoration(
-                                                              color: AppThemeColor.buttonColor,
-                                                                borderRadius: BorderRadius.circular(2),
-                                                                border: Border.all(color: AppThemeColor.buttonColor)
-                                                            ),
-                                                            child: Text(
-                                                                "${paymentData['status']}",
-                                                                style: TextStyle(fontSize:10,fontWeight:FontWeight.w500,color: Colors.white)
-                                                            ),
-                                                          ),
 
-                                                        ],
-                                                      ),
 
                                                     ],
                                                   ),
                                                 ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                       Text(
+                                                         "ORDER DATE",
+                                                         style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color: Color(0xff9B9B9B)),
+                                                       ),
+                                                       Text(
+                                                           formattedDate.toString(),
+                                                         style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color:Color(0xff9B9B9B)),
+                                                       ),
+                                                      // addHeight(4),
+
+
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                       Text(
+                                                         "STATUS",
+                                                         style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color: Color(0xff9B9B9B)),
+                                                       ),
+                                                       Text(
+                                                         "${paymentData['status']}",
+                                                         style: TextStyle(fontSize:10,fontWeight: FontWeight.w400,color:Color(0xff9B9B9B)),
+                                                       ),
+                                                      // addHeight(4),
+
+
+                                                    ],
+                                                  ),
+                                                ),
+
                                               ],
                                             ),
                                           ),
                                           Divider(),
                                           Row(
                                             children: [
-                                              Icon(Icons.remove_red_eye_rounded,color: AppThemeColor.buttonColor,),
-                                              addWidth(20),
-                                              Icon(Icons.track_changes,color: AppThemeColor.buttonColor),
-                                              addWidth(20),
-                                              Icon(Icons.download,color: AppThemeColor.buttonColor),
-                                              addWidth(20),
-                                              Icon(Icons.email_outlined,color: AppThemeColor.buttonColor),
+                                              Icon(Icons.remove_red_eye_rounded,color: AppThemeColor.primaryColor,size: 16,),
+                                              addWidth(10),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                  borderRadius: BorderRadius.circular(2)
+                                                ),
+                                                height:
+                                                height * .018,
+                                                width: width * .004,
+                                              ),
+                                              addWidth(10),
+                                              Icon(Icons.track_changes,color: AppThemeColor.primaryColor,size: 16,),
+                                              addWidth(10),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.circular(2)
+                                                ),
+                                                height:
+                                                height * .018,
+                                                width: width * .004,
+                                              ),
+                                              addWidth(10),
+                                              Icon(Icons.download,color: AppThemeColor.primaryColor,size: 16,),
+                                              addWidth(10),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius: BorderRadius.circular(2)
+                                                ),
+                                                height:
+                                                height * .018,
+                                                width: width * .004,
+                                              ),
+                                              addWidth(10),
+                                              GestureDetector(
+                                                  onTap: (){
+                                                    sendEmail();
+                                                  },
+                                                  child: Icon(Icons.email_outlined,color: AppThemeColor.primaryColor,size: 16,)),
                                             ],
                                           )
 
@@ -497,7 +540,7 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                                                             borderRadius: BorderRadius
                                                                 .circular(6),
                                                             color: AppThemeColor
-                                                                .buttonColor
+                                                                .primaryColor
 
                                                         ),
                                                         child: const Text("COMPLETED",
@@ -609,7 +652,7 @@ class _MyOrdersOfMartState extends State<MyOrdersOfMart> {
                                                             borderRadius: BorderRadius
                                                                 .circular(6),
                                                             color: AppThemeColor
-                                                                .buttonColor
+                                                                .primaryColor
 
                                                         ),
                                                         child: const Text("CANCELLED",

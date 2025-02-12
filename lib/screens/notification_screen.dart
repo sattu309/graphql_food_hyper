@@ -82,7 +82,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                 width: width * .010,
                 height: height * .08,
                 decoration:  BoxDecoration(
-                  color: AppThemeColor.buttonColor,
+                  color: AppThemeColor.primaryColor,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                 ),
               ),
@@ -96,7 +96,7 @@ class NotificationScreenState extends State<NotificationScreen> {
                 height: height * .05,
                 width: width * .10,
                 decoration:  ShapeDecoration(
-                    color: AppThemeColor.buttonColor, shape: CircleBorder()),
+                    color: AppThemeColor.primaryColor, shape: CircleBorder()),
                 child: Center(
                     child: Text(
                       "F",style: TextStyle(color: Colors.white),

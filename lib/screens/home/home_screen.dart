@@ -8,10 +8,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shop_app/helper/apptheme_color.dart';
 import 'package:shop_app/helper/heigh_width.dart';
-import '../../constants.dart';
 import '../../controllers/session_controller.dart';
 import '../../controllers/wishlist_controller.dart';
-import '../details/details_screen.dart';
+import '../product_details/details_screen.dart';
 import '../products/all_products_screen.dart';
 import 'components/home_header.dart';
 import 'components/section_title.dart';
@@ -138,12 +137,11 @@ class _HomeScreenState extends State<HomeScreen> {
             if (result.isLoading) {
               return Center(
                 child: CircularProgressIndicator(
-                  color: AppThemeColor.buttonColor,
+                  color: AppThemeColor.primaryColor,
                 ),
               );
             }
             final homeData = result.data?['homeData'];
-          // final categories = homeData['categories'];
             final latestProduct = homeData['latestProducts'];
             final featuredProduct = homeData['featuredProducts'];
             final List<dynamic> bannerList = homeData['banners'];
@@ -160,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: 60,
                       width: width,
                       decoration: BoxDecoration(
-                        color: AppThemeColor.buttonColor
+                        color: AppThemeColor.primaryColor
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(5),
@@ -428,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         fontSize: 15,
                                                         fontFamily: "IBM Plex Sans",
                                                         fontWeight: FontWeight.w700,
-                                                        color: AppThemeColor.buttonColor,
+                                                        color: AppThemeColor.primaryColor,
                                                       ),
                                                     ),
                                                     InkWell(
@@ -458,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           shape: BoxShape.circle,
                                                         ),
                                                         child: SvgPicture.asset(
-                                                          "assets/icons/Heart Icon_2.svg",color: AppThemeColor.buttonColor,
+                                                          "assets/icons/Heart Icon_2.svg",color: AppThemeColor.primaryColor,
                                                         ),
                                                       ):
                                                       Container(
@@ -572,7 +570,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           fontSize: 14,
                                                           fontFamily: "IBM Plex Sans",
                                                           fontWeight: FontWeight.w600,
-                                                          color: AppThemeColor.buttonColor,
+                                                          color: AppThemeColor.primaryColor,
                                                         ),
                                                       ),
                                                       InkWell(

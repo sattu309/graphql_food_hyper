@@ -4,17 +4,14 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shop_app/helper/apptheme_color.dart';
 import 'package:shop_app/helper/heigh_width.dart';
 import 'package:shop_app/screens/cart/cart_screen.dart';
-import 'package:shop_app/screens/products/category_products_screen.dart';
+import 'package:shop_app/screens/category/category_products_screen.dart';
 
 import '../../controllers/cart_controller.dart';
-import '../home/components/home_header.dart';
 import '../home/components/search_field.dart';
 
 class CategoryList extends StatefulWidget {
@@ -46,12 +43,6 @@ class _CategoryListState extends State<CategoryList> {
 }
   """;
 
-
-  final List<String> choosedOption =
-  ["1","2", "3", "4","6","12"];
-  String? chooseUnit;
-
-
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -61,7 +52,7 @@ class _CategoryListState extends State<CategoryList> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          elevation: 1,
+          // elevation: 1,
           title:   SearchField(),
           actions: [
             Padding(
@@ -75,7 +66,7 @@ class _CategoryListState extends State<CategoryList> {
                       // Get.to(()=>CartScreen());
                     },
                     child: Badge(
-                      badgeStyle: BadgeStyle(badgeColor: AppThemeColor.buttonColor,),
+                      badgeStyle: BadgeStyle(badgeColor: AppThemeColor.primaryColor,),
                       badgeContent:     Obx((){
                         return Text(cartController.cartCount.value,style: TextStyle(color: Colors.white),);}),
                       child: Icon(Icons.shopping_bag_outlined,color: Colors.grey,size: 25,),
@@ -88,21 +79,24 @@ class _CategoryListState extends State<CategoryList> {
         ),
         body:
         Query(
-          options: QueryOptions(document: gql(fetchCategories)),
+          options: QueryOptions(document: gql(fetchCategories),fetchPolicy: FetchPolicy.noCache,),
           builder:  (QueryResult result, {Refetch? refetch, FetchMore? fetchMore}) {
             if (result.hasException) {
               return Text(result.exception.toString());
             }
 
             if (result.isLoading) {
-              return Center(child:  CircularProgressIndicator(color: AppThemeColor.buttonColor,));
+              return Center(child:  CircularProgressIndicator(color: AppThemeColor.primaryColor,));
             }
 
             final allCategories = result.data!['productCategories']['edges'];
+            if (allCategories == null || allCategories.isEmpty) {
+              return Center(child: Text("No categories available"));
+            }
             log("ALL CATEGORIES ${allCategories}");
             return
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 15,vertical: 3),
                 child: Column(
                   crossAxisAlignment:  CrossAxisAlignment.start,
                   children: [
@@ -131,7 +125,8 @@ class _CategoryListState extends State<CategoryList> {
                               image = img['sourceUrl'];
                             }
 
-                            return  GestureDetector(
+                            return
+                              GestureDetector(
                               onTap: (){
 
                                 log("CATEGORY ID ${data['productCategoryId'].toString()}");

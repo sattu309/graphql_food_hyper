@@ -43,7 +43,7 @@ class _MultipleCheckboxScreenState extends State<MultipleCheckboxScreen> {
                       style: const TextStyle(color: Colors.black87),
                     ),
                     Checkbox(
-                      activeColor: AppThemeColor.buttonColor,
+                      activeColor: AppThemeColor.primaryColor,
                       value: data["isChecked"],
                       onChanged: (value) {
                         setState(() {

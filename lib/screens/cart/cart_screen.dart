@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:lottie/lottie.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components/rounded_icon_btn.dart';
@@ -12,13 +13,9 @@ import '../../controllers/cart_controller.dart';
 import '../../controllers/session_controller.dart';
 import '../../helper/apptheme_color.dart';
 import '../../helper/custom_snackbar.dart';
-import '../../helper/dimentions.dart';
 import '../../helper/heigh_width.dart';
-import '../../theme.dart';
-import '../details/details_screen.dart';
-import '../home/components/search_field.dart';
 import '../login_flow/login_page.dart';
-import '../search/search_screen.dart';
+import '../product_details/details_screen.dart';
 import 'checkout_page.dart';
 
 class CartScreen extends StatefulWidget {
@@ -36,29 +33,25 @@ class _CartScreenState extends State<CartScreen> {
   final sessionIdController = Get.put(SessionController());
   final cartController = Get.put(CartController());
   late GraphQLClient client;
-  void initializeClient() {
+  GraphQLClient initializeClient() {
     log("JWT TOKEN...${sessionIdController.sessionId.value}");
     final HttpLink httpLink = HttpLink(
-      'https://wpdemo.bitlogiq.co.za/graphql',
+      'https://ecom.bitlogiq.co.za/graphql',
       defaultHeaders: {
         'Authorization': 'Bearer ${sessionIdController.sessionId.value}',
       },
     );
 
-    client = GraphQLClient(
+    return client = GraphQLClient(
       cache: GraphQLCache(store: InMemoryStore()),
       link: httpLink,
     );
   }
 
   String allQty = "";
-  String allQtyPrice = "";
-  int sumOfQty = 0;
-  int totalAmt = 0;
-  String imagePath = "https://shopdemo.bitlogiq.co.za/products/";
 
   Future<void> deleteCartMutation(String cartKey) async {
-    initializeClient();
+     final GraphQLClient client = initializeClient();
     final MutationOptions options = MutationOptions(
       document: gql('''
     mutation RemoveItemsFromCart(\$input: RemoveItemsFromCartInput!) {
@@ -133,7 +126,7 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
 
-    final GraphQLClient client = GraphQLProvider.of(context).value;
+    // final GraphQLClient client = GraphQLProvider.of(context).value;
 
     final QueryResult result = await client.mutate(options);
 
@@ -142,7 +135,7 @@ class _CartScreenState extends State<CartScreen> {
       print("DELETE CART ERROR::::: $error");
       final snackBar = CustomSnackbar.build(
         message: error,
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -164,7 +157,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> updateCartMutation(String cartKey, String qty) async {
-    initializeClient();
+   final GraphQLClient client = initializeClient();
     SharedPreferences cartLocalData = await SharedPreferences.getInstance();
     log("BEFORE${cartLocalData.getString('cart_data')}");
     await cartLocalData.remove('cart_data');
@@ -247,7 +240,7 @@ class _CartScreenState extends State<CartScreen> {
       },
     );
 
-    final GraphQLClient client = GraphQLProvider.of(context).value;
+    // final GraphQLClient client = GraphQLProvider.of(context).value;
 
     final QueryResult result = await client.mutate(options);
 
@@ -256,7 +249,7 @@ class _CartScreenState extends State<CartScreen> {
       print("UPDATE CART ERROR::::: $error");
       final snackBar = CustomSnackbar.build(
         message: error,
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -345,12 +338,10 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
+    cartController.fetchCartData();
     cartController.getCartDataLocally();
     log("Access Token ${sessionIdController.sessionId.value.toString()}");
     initializeClient();
-    // sessionIdController.getAccessToken();
-
-    // cartController.getCartDataLocally();
   }
 
   int selectedValue = 1;
@@ -378,7 +369,7 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     Badge(
                       badgeStyle: BadgeStyle(
-                        badgeColor: AppThemeColor.buttonColor,
+                        badgeColor: AppThemeColor.primaryColor,
                       ),
                       badgeContent: Obx(() {
                         return Text(
@@ -407,7 +398,7 @@ class _CartScreenState extends State<CartScreen> {
                 if (result.isLoading) {
                   return Center(
                       child: CircularProgressIndicator(
-                        color: AppThemeColor.buttonColor,
+                        color: AppThemeColor.primaryColor,
                       ));
                 }
                 return
@@ -430,7 +421,6 @@ class _CartScreenState extends State<CartScreen> {
 
                                     final img =
                                     productData['image']['sourceUrl'];
-                                    log("cart imagesss ${img}");
                                     // final vPrice = cartData[index]['variation']?['nodes']?['attributes']?['edges']['node']['value'];
                                     final quantity = cartController
                                         .cartData[index]['quantity'];
@@ -456,9 +446,12 @@ class _CartScreenState extends State<CartScreen> {
                                               onTap: (){
                                                 log("PRODUCT ID of category product ${productData['databaseId'].toString()}");
                                                 // Get.to(()=> DetailsScreen(productId: productsData['id'],));
+
                                                 pushScreen(context,
                                                     screen:  DetailsScreen(productId: productData['databaseId'].toString(), productStatus: "",), withNavBar: true);
-                                              },
+                                                Get.back();
+                                                Get.back();
+                                                },
                                               child: Container(
                                                 padding: const EdgeInsets
                                                     .symmetric(
@@ -602,7 +595,7 @@ class _CartScreenState extends State<CartScreen> {
                                                               //     child: Icon(
                                                               //       Icons.clear,
                                                               //       color: AppThemeColor
-                                                              //           .buttonColor,
+                                                              //           .primaryColor,
                                                               //     ))
                                                             ],
                                                           ),
@@ -696,7 +689,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           //                           fontSize: 15,
                                                           //                           fontFamily: "IBM Plex Sans",
                                                           //                           fontWeight: FontWeight.w700,
-                                                          //                           color: AppThemeColor.buttonColor,
+                                                          //                           color: AppThemeColor.primaryColor,
                                                           //                         ),
                                                           //                       ),
                                                           //                     ),
@@ -708,7 +701,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           //                     fontSize: 18,
                                                           //                     fontFamily: "IBM Plex Sans",
                                                           //                     fontWeight: FontWeight.w700,
-                                                          //                     color: AppThemeColor.buttonColor,
+                                                          //                     color: AppThemeColor.primaryColor,
                                                           //                   ),
                                                           //                 ),
                                                           //         ],
@@ -743,7 +736,7 @@ class _CartScreenState extends State<CartScreen> {
                                                                         fontSize: 14,
                                                                         fontFamily: "IBM Plex Sans",
                                                                         fontWeight: FontWeight.w700,
-                                                                        color: AppThemeColor.buttonColor,
+                                                                        color: AppThemeColor.primaryColor,
                                                                       ),
                                                                     ),
                                                                   ),
@@ -756,7 +749,7 @@ class _CartScreenState extends State<CartScreen> {
                                                               fontSize: 14,
                                                               fontFamily: "IBM Plex Sans",
                                                               fontWeight: FontWeight.w700,
-                                                              color: AppThemeColor.buttonColor,
+                                                              color: AppThemeColor.primaryColor,
                                                             ),
                                                           ),
 
@@ -864,14 +857,15 @@ class _CartScreenState extends State<CartScreen> {
 
                           children: [
                             SizedBox(height: height*.20,),
-                            Image.asset("assets/images/cart_empty.png"),
-                            Text(
-                              "YOUR CART IS CURRENTLY EMPTY",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: AppThemeColor.buttonColor),
-                            ),
+                            Lottie.asset('assets/images/emptyCart.json'),
+                            // Image.asset("assets/images/cart_empty.png"),
+                            // Text(
+                            //   "YOUR CART IS CURRENTLY EMPTY",
+                            //   style: TextStyle(
+                            //       fontWeight: FontWeight.w700,
+                            //       fontSize: 16,
+                            //       color: AppThemeColor.primaryColor),
+                            // ),
                           ],
                         ),
                       ));
@@ -935,7 +929,7 @@ class _CartScreenState extends State<CartScreen> {
                         Expanded(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: AppThemeColor.buttonColor,
+                                backgroundColor: AppThemeColor.primaryColor,
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     BorderRadius.circular(12))),

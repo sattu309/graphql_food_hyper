@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../helper/assets_image.dart';
 import '../login_flow/login_page.dart';
 import '../new_common_tab.dart';
 
@@ -37,7 +35,7 @@ class _FoodSplashState extends State<FoodSplash> {
     return SingleChildScrollView(
       child: Column(
         children: [
-            Image.asset("assets/images/foodSpl.png"),
+            Image.asset(AppAssets.splashImage),
         ],
       ),
     );

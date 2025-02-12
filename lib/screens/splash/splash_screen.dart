@@ -85,7 +85,7 @@ class _SplashScreenState extends State<SplashScreen> {
                               width: currentPage == index ? 20 : 6,
                               decoration: BoxDecoration(
                                 color: currentPage == index
-                                    ? AppThemeColor.buttonColor
+                                    ? AppThemeColor.primaryColor
                                     : const Color(0xFFD8D8D8),
                                 borderRadius: BorderRadius.circular(3),
                               ),
@@ -95,7 +95,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         const Spacer(flex: 3),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppThemeColor.buttonColor
+                            backgroundColor: AppThemeColor.primaryColor
                           ),
                           onPressed: () async {
                             SharedPreferences pref = await SharedPreferences.getInstance();

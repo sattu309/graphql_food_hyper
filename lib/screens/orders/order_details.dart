@@ -137,7 +137,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
             if (result.isLoading) {
               return Center(
                   child: CircularProgressIndicator(
-                color: AppThemeColor.buttonColor,
+                color: AppThemeColor.primaryColor,
               ));
             }
             final myOrderData = result.data?['order']['lineItems']['edges'];
@@ -157,9 +157,9 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                       boxShadow: [
                         BoxShadow(
                             offset: const Offset(
-                                1, 1),
+                                2, 1),
                             spreadRadius: 1,
-                            blurRadius: 3,
+                            blurRadius: 1,
                             color: Colors.black
                                 .withOpacity(
                                 0.10))
@@ -178,7 +178,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                 style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 15,
-                                    color: AppThemeColor.buttonColor),
+                                    color: AppThemeColor.primaryColor),
                               ),
                               addHeight(5),
                               Text(
@@ -196,7 +196,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                 horizontal: 10, vertical: 7),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
-                                color: AppThemeColor.buttonColor),
+                                color: AppThemeColor.primaryColor),
                             child: Center(
                               child: Text(
                                 widget.status,
@@ -237,9 +237,9 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                 boxShadow: [
                                   BoxShadow(
                                       offset: const Offset(
-                                          1, 1),
-                                      spreadRadius: 2,
-                                      blurRadius: 5,
+                                          2, 1),
+                                      spreadRadius: 1,
+                                      blurRadius: 1,
                                       color: Colors.black
                                           .withOpacity(
                                           0.10))
@@ -309,7 +309,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                                   fontSize: 17,
                                                   fontWeight: FontWeight.w700,
                                                   color: AppThemeColor
-                                                      .buttonColor),
+                                                      .primaryColor),
                                             ),
                                           ],
                                         ),
@@ -433,7 +433,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                         //                                         fontWeight: FontWeight
                         //                                             .w700,
                         //                                         color: AppThemeColor
-                        //                                             .buttonColor),
+                        //                                             .primaryColor),
                         //                                   ),
                         //                                 ],
                         //                               ),
@@ -487,7 +487,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 6, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: AppThemeColor.buttonColor,
+                                  color: AppThemeColor.primaryColor,
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Center(
@@ -534,7 +534,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                 style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w700,
-                                    color: AppThemeColor.buttonColor),
+                                    color: AppThemeColor.primaryColor),
                               ),
                               Spacer(),
                               Text(
@@ -542,7 +542,7 @@ class _OrderDetailsOfMartState extends State<OrderDetailsOfMart>
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: AppThemeColor.buttonColor),
+                                    color: AppThemeColor.primaryColor),
                               ),
                             ],
                           ),

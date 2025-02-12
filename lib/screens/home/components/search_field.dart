@@ -17,76 +17,77 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
+  final searchController = Get.put(ProductSearchController());
+
+  @override
+  void dispose() {
+    super.dispose();
+    searchController.keyWordText.clear();
+  }
   @override
   Widget build(BuildContext context) {
-    final searchController = Get.put(ProductSearchController());
-
     var width = MediaQuery.of(context).size.width;
     return
       Form(
-      child: Container(
-        height: 40,
-        width: width*.72,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade100),
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          // boxShadow: [
-          //   BoxShadow(
-          //       offset: const Offset(4, 4),
-          //       spreadRadius: 2,
-          //       blurRadius: 10,
-          //       color: Colors.black.withOpacity(0.10)
-          //   )
-          // ],
-
-        ),
-        child:
-        TextFormField(
-          onFieldSubmitted: (value) => {
-           if(searchController.keyWordText.text.isNotEmpty){
-             searchController.onSearchChanged(value,context),
-             searchController.searchMutation(searchController.keyWordText.text.toString(),context),
-             Get.to(()=>SearchPage())
-           }
-        },
-          controller: searchController.keyWordText,
-          onChanged: (value) {
-            searchController.searchMutation(searchController.keyWordText.text.toString(),context);
-
-            },
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.grey.shade50,
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            border: searchOutlineInputBorder,
-            focusedBorder: searchOutlineInputBorder,
-            enabledBorder: searchOutlineInputBorder,
-            hintText: "Search by products, brand & more...",
-            hintStyle: TextStyle(fontSize: 12),
-
-            prefixIcon: IconButton(
-                onPressed: (){
-                  FocusManager.instance.primaryFocus!
-                      .unfocus();
-                  print(searchController.keyWordText);
-    if(searchController.keyWordText.text.isNotEmpty){
-      pushScreen(context, screen: SearchPage(),withNavBar: true);
-      // Get.to(()=>SearchPage());
-      searchController.searchMutation(searchController.keyWordText.text.toString(),context);
-    }
-
-
-                },
-                icon:  Icon(Icons.search,color: AppThemeColor.buttonColor,),),
-
+        child: Container(
+          height: 40,
+          width: width * .72,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade100),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
           ),
+          child:
+
+          TextFormField(
+            controller: searchController.keyWordText,
+            onFieldSubmitted: (value) {
+              if (searchController.keyWordText.text.isNotEmpty) {
+                searchController.onSearchChanged(value, context);
+                searchController.searchMutation(
+                    searchController.keyWordText.text.toString(), context);
+                pushScreen(context, screen: const SearchPage(), withNavBar: true,replaceCurrent: true);
+                setState(() {});
+              }
+            },
+
+            onChanged: (value) {
+              searchController.onSearchChanged(value, context);
+            },
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.grey.shade50,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              border: searchOutlineInputBorder,
+              focusedBorder: searchOutlineInputBorder,
+              enabledBorder: searchOutlineInputBorder,
+              hintText: "Search by products, brand & more...",
+              hintStyle: TextStyle(fontSize: 12),
+              prefixIcon:
+              IconButton(
+                onPressed: () {
+                  FocusManager.instance.primaryFocus!.unfocus();
+                  if (searchController.keyWordText.text.isNotEmpty) {
+                    pushScreen(context, screen: const SearchPage(), withNavBar: true,);
+                    searchController.searchMutation(
+                        searchController.keyWordText.text.toString(), context);
+                    setState(() {});
+                  }
+                },
+                icon: Icon(
+                  Icons.search,
+                  color: AppThemeColor.primaryColor,
+                ),
+              ),
+            ),
+          )
+
         ),
-      ),
-    );
+      );
+
   }
 }
+
 class SearchField1 extends StatelessWidget {
   const SearchField1({
     Key? key,
@@ -95,27 +96,16 @@ class SearchField1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return
-      Form(
+    return Form(
       child: Container(
         height: 40,
-        width: width*.60,
+        width: width * .60,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.shade100),
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
-          // boxShadow: [
-          //   BoxShadow(
-          //       offset: const Offset(4, 4),
-          //       spreadRadius: 2,
-          //       blurRadius: 10,
-          //       color: Colors.black.withOpacity(0.10)
-          //   )
-          // ],
-
         ),
-        child:
-        TextFormField(
+        child: TextFormField(
           onChanged: (value) {},
           decoration: InputDecoration(
             filled: true,
@@ -133,7 +123,8 @@ class SearchField1 extends StatelessWidget {
   }
 }
 
- OutlineInputBorder searchOutlineInputBorder = OutlineInputBorder(
-  borderRadius: const BorderRadius.all(Radius.circular(8)),
-  borderSide: BorderSide(color:Colors.transparent,)
-);
+OutlineInputBorder searchOutlineInputBorder = const OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    borderSide: BorderSide(
+      color: Colors.transparent,
+    ));

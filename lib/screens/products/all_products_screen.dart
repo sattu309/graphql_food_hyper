@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'package:badges/badges.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'hide Badge;
 import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -13,9 +11,8 @@ import '../../controllers/cart_controller.dart';
 import '../../controllers/wishlist_controller.dart';
 import '../../helper/heigh_width.dart';
 import '../cart/cart_screen.dart';
-import '../details/details_screen.dart';
 import '../home/components/search_field.dart';
-import '../search/search_screen.dart';
+import '../common_product/common_product_format.dart';
 import 'discount_filter.dart';
 import 'multiple_checkbox.dart';
 
@@ -94,29 +91,7 @@ query GetProducts {
   }
 }
   """;
-  String calDis(String regPrice, String salePrice) {
-    bool isVar = regPrice.contains(' - ');
-    double disCount = 0;
 
-    if (isVar) {
-      List<String> regPrices = regPrice.split(' - ');
-      List<String> salePrices = salePrice.split(' - ');
-
-      // Parsing the string prices to double
-      double regPriceMin = double.parse(regPrices[0].replaceAll(RegExp(r'[^\d.]'), ''));
-      double salePriceMin = double.parse(salePrices[0].replaceAll(RegExp(r'[^\d.]'), ''));
-
-      disCount = ((regPriceMin - salePriceMin) / regPriceMin) * 100;
-    } else {
-      // Parsing the string prices to double
-      double regPriceValue = double.parse(regPrice.replaceAll(RegExp(r'[^\d.]'), ''));
-      double salePriceValue = double.parse(salePrice.replaceAll(RegExp(r'[^\d.]'), ''));
-
-      disCount = ((regPriceValue - salePriceValue) / regPriceValue) * 100;
-    }
-
-    return (disCount.toInt()).toString();
-  }
 
 
   @override
@@ -127,14 +102,11 @@ query GetProducts {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        elevation: 1,
-        title:   SearchField(),
+        title:   const SearchField(),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
@@ -147,7 +119,7 @@ query GetProducts {
 
                   },
                   child: Badge(
-                    badgeStyle: BadgeStyle(badgeColor: AppThemeColor.buttonColor,),
+                    badgeStyle: BadgeStyle(badgeColor: AppThemeColor.primaryColor,),
                     badgeContent:     Obx((){
                       return Text(cartController.cartCount.value,style: TextStyle(color: Colors.white),);}),
                     child: Icon(Icons.shopping_bag_outlined,color: Colors.grey,size: 25,),
@@ -160,7 +132,12 @@ query GetProducts {
       ),
 
       body: Query(
-          options: QueryOptions(document: gql(fetchProducts)),
+          options: QueryOptions(
+            document: gql(fetchProducts),
+            variables: const {
+            'limit': 10,
+            'offset': 0,
+          },),
           builder:  (QueryResult result, {Refetch? refetch, FetchMore? fetchMore}){
             if (result.hasException) {
               return Text(result.exception.toString());
@@ -168,7 +145,7 @@ query GetProducts {
 
             if (result.isLoading) {
               return  Center(child: CircularProgressIndicator(
-                color: AppThemeColor.buttonColor,));
+                color: AppThemeColor.primaryColor,));
             }
 
             final  List<dynamic>? allProducts = result.data!['products']['edges'];
@@ -176,9 +153,11 @@ query GetProducts {
             if (allProducts == null || allProducts.isEmpty) {
               return const Center(child: Text('No products available'));
             }
-            return Padding(
+            return
+              Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10,),
-              child: GridView.builder(
+              child:
+              GridView.builder(
                 padding: const EdgeInsets.only(bottom: 60.0),
                 itemCount: allProducts.length,
                 gridDelegate:  const SliverGridDelegateWithFixedCrossAxisCount(
@@ -186,7 +165,7 @@ query GetProducts {
                   childAspectRatio: 0.6,
                   mainAxisSpacing: 0,
                   crossAxisSpacing: 0,
-                  mainAxisExtent: 290,
+                  mainAxisExtent: 270,
 
                 ),
                 itemBuilder: (context, index) {
@@ -205,214 +184,23 @@ query GetProducts {
                   }
 
 
-                  return
-                    GestureDetector(
-                      onTap: (){
-                       // log("PRODUCT ID $productsData['databaseId']");
-                        // Get.to(()=> DetailsScreen(productId: productsData['id'],));
-                        pushScreen(context,
-                            screen:  DetailsScreen(productId: productsData['databaseId'].toString(), productStatus: productsData['stockStatus'],), withNavBar: true);
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          addHeight(10),
-                          Stack(
-                            children: [
-                              Container(
-                                  height: 280,
-                                  padding: const EdgeInsets.symmetric(horizontal: 10,),
-                                  margin: const EdgeInsets.symmetric(horizontal: 6),
-                                   decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(7),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        offset: const Offset(0, -16),
-                                        blurRadius: 20,
-                                        color: const Color(0xFFDADADA).withOpacity(0.15),
-                                      )
-                                    ],
-                                  ),
-                                  child:
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(7),
-                                        child: CachedNetworkImage(
-                                          imageUrl: imageUrl,
-                                          height: height *.20,
-                                          width: width *.45,
-                                          fit: BoxFit.contain,
-                                          errorWidget: (_, __, ___) => Image.asset(
-                                            "assets/images/Image Popular Product 2.png",
-                                            fit: BoxFit.cover,
-                                            height: 50,
-                                            width: 50,
-                                          ),
-                                          placeholder: (_, __) =>  Center(
-                                            child: Container(
-                                              color: Colors.grey.shade100,
-                                            ),
-                                          ),
-
-                                        ),
-                                      ),
-                                      // const SizedBox(height: 3),
-                                      Text(
-                                          productsData['name'],
-                                          maxLines: 1,
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w500,color: CupertinoColors.black,fontSize: 14)
-                                      ),
-                                      addHeight(3),
-                                      Text(
-                                          productsData['stockStatus'] == "IN_STOCK" ? "INSTOCK" : "OUT OF STOCK",
-                                          maxLines: 1,
-                                          style:  TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              color: productsData['stockStatus'] == "IN_STOCK" ? Colors.green:Colors.red,fontSize: 10)
-                                      ),
-                                   addHeight(3),
-                                      productsData['averageRating']!=null ?
-                                   Row(
-                                     children: [
-                                       ...List.generate(productsData['averageRating'], (index){
-                                         return  SingleChildScrollView(
-                                           scrollDirection: Axis.vertical,
-                                           child: Row(
-                                             children: [
-                                               Icon(Icons.star,color: Colors.yellow.shade600,size: 17,),
-                                             ],
-                                           ),
-                                         );
-                                       }),
-                                       addWidth(3),
-                                       Text(
-                                         "${productsData['reviewCount']}",
-                                         style: const TextStyle(
-                                           fontSize: 16,
-                                           fontFamily: "IBM Plex Sans",
-                                           fontWeight: FontWeight.w700,
-                                           color: Colors.black38,
-                                         ),
-                                       ),
-                                     ]
-                                   ):addHeight(16),
-                                      addHeight(2),
-                                      (salePriceStr!="0") ?
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-
-                                          // addWidth(8),
-                                          Row(
-                                            children: [
-                                              Flexible(
-                                                child: Text(
-                                                  regularPriceStr,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontFamily: "IBM Plex Sans",
-                                                    fontWeight: FontWeight.w700,
-                                                    decoration:
-                                                    TextDecoration.lineThrough,
-                                                    decorationStyle: TextDecorationStyle.solid,
-                                                    color: Colors.grey.shade400,
-                                                  ),
-                                                ),
-                                              ),
-                                              addWidth(5),
-                                              Flexible(
-                                                child: Text(
-                                                  salePriceStr,
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontFamily: "IBM Plex Sans",
-                                                    fontWeight: FontWeight.w700,
-                                                    color: AppThemeColor.buttonColor,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ):Text(
-                                      productsData['price'],
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: "IBM Plex Sans",
-                                          fontWeight: FontWeight.w700,
-                                          color: AppThemeColor.buttonColor,
-                                        ),
-                                      ),
-                                      addHeight(5),
-                                      productsData['type'] =="SIMPLE" ?
-                                      Container(
-                                        height: 25,
-                                        alignment: Alignment.centerRight,
-                                        width: width * .5,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-
-                                            shape: RoundedRectangleBorder(),
-                                            backgroundColor: AppThemeColor.buttonColor,
-                                          ),
-                                          onPressed: () async {
-                                            wishListController.addToCart(
-                                                productsData['databaseId'],
-                                                0,
-                                                1,
-                                                context);
-                                            cartController.getCartDataLocally();
-                                          },
-                                          child: const Text("ADD TO CART",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 10),),
-                                        ),
-                                      ):
-                                      Container(
-                                        height: 25,
-                                        alignment: Alignment.centerRight,
-                                        width: width * .5,
-                                        child: ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            shape: const RoundedRectangleBorder(),
-                                            backgroundColor: AppThemeColor.buttonColor,
-                                          ),
-                                          onPressed: () async {
-                                            pushScreen(context,
-                                                screen:  DetailsScreen(productId: productsData['databaseId'].toString(), productStatus: productsData['stockStatus'],), withNavBar: true);
-                                          },
-                                          child: const Text("VIEW OPTION",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 10),),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                //
-                                // Image.asset("assets/images/glap.png",),
-                              ),
-                              (disPercentage!='') ?
-                              Positioned(
-                                top: height*0.015,
-                                  left: 10,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 5,vertical: 3),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: AppThemeColor.buttonColor
-                                    ),
-                                    child: Text(
-                                      disPercentage+ '%',
-                                  maxLines: 1,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,color: CupertinoColors.white,fontSize: 13)
-                              ),)) :SizedBox()
-                            ],
-                          ),
-
-                        ],
-                      ),
-                    );
+                  return CommonProductFormat(
+                    onPress: () {},
+                    itemName: productsData['name'],
+                    stockStatus:
+                    productsData['stockStatus'] == "IN_STOCK"
+                        ? "INSTOCK"
+                        : "OUT OF STOCK",
+                    itemPrice: productsData['price'],
+                    salePrice: salePriceStr,
+                    regPrice: regularPriceStr,
+                    itemImg: imageUrl,
+                    disCountPercent: disPercentage,
+                    productType: productsData['type'],
+                    productID: productsData['databaseId'].toString(),
+                    avrRating: productsData['averageRating'].toString(),
+                    reviewCount: productsData['reviewCount'].toString(),
+                  );
                 },
               ),
             );

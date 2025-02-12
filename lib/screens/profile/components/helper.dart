@@ -17,22 +17,7 @@ class NewHelper {
     }
   }
 
-  Future<List<File>?> addFilePickerList() async {
-    try {
-      final item = await FilePicker.platform.pickFiles(
-        allowMultiple: true,
-        type: FileType.custom,
-        allowedExtensions: ['jpg'],
-      );
-      if (item == null) {
-        return null;
-      } else {
-        return item.files.map((e) => File(e.path!)).toList();
-      }
-    } on PlatformException catch (e) {
-      throw Exception(e);
-    }
-  }
+
 
   Future<File?> addImagePicker(
       {ImageSource imageSource = ImageSource.gallery,

@@ -10,7 +10,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shop_app/helper/apptheme_color.dart';
 import 'package:shop_app/helper/heigh_width.dart';
-import 'package:shop_app/screens/products/category_products_screen.dart';
+import 'package:shop_app/screens/category/category_products_screen.dart';
 
 class SubCategoryList extends StatefulWidget {
   const SubCategoryList({super.key});
@@ -53,7 +53,7 @@ class _SubCategoryListState extends State<SubCategoryList> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
         centerTitle: false,
         leadingWidth: 60,
         leading: GestureDetector(
@@ -75,7 +75,7 @@ class _SubCategoryListState extends State<SubCategoryList> {
           }
 
           if (result.isLoading) {
-            return Center(child:  CircularProgressIndicator(color: AppThemeColor.buttonColor,));
+            return Center(child:  CircularProgressIndicator(color: AppThemeColor.primaryColor,));
           }
 
           final allCategories = result.data!['productCategories']['edges'];

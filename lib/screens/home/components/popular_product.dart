@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 import '../../../components/product_card.dart';
 import '../../../models/Product.dart';
-import '../../details/details_screen.dart';
 import '../../products/all_products_screen.dart';
-import '../../products/category_products_screen.dart';
 import 'section_title.dart';
 
 class PopularProducts extends StatelessWidget {

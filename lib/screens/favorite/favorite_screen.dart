@@ -1,16 +1,7 @@
-import 'dart:developer';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 import 'package:shop_app/controllers/wishlist_controller.dart';
-import '../../constants.dart';
-import '../../helper/apptheme_color.dart';
 import '../../helper/heigh_width.dart';
-import '../details/details_screen.dart';
-import '../products/all_products_screen.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -155,7 +146,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               //                             style:  TextStyle(
               //                               fontSize: 14,
               //                               fontWeight: FontWeight.w600,
-              //                               color: AppThemeColor.buttonColor,
+              //                               color: AppThemeColor.primaryColor,
               //                             ),
               //
               //                           ),
@@ -181,7 +172,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
               //                               child: SvgPicture.asset(
               //                                 "assets/icons/Heart Icon_2.svg",
               //                                 colorFilter: ColorFilter.mode(
-              //                                     AppThemeColor.buttonColor,
+              //                                     AppThemeColor.primaryColor,
               //                                     BlendMode.srcIn),
               //                               ),
               //                             ),

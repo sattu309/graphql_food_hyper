@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_app/components/graphql_client.dart';
+import 'package:shop_app/helper/snackbar_popup.dart';
 
 import '../helper/apptheme_color.dart';
 import '../helper/common_button.dart';
@@ -47,7 +49,7 @@ class WishListController extends GetxController{
       print("ADD WISHLIST ERROR::::: $errorMessages");
       final snackBar = CustomSnackbar.build(
         message: errorMessages.toString(),
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -56,7 +58,7 @@ class WishListController extends GetxController{
       if (wishListData != null) {
         final snackBar = CustomSnackbar.build(
           message: wishListData['message'].toString(),
-          backgroundColor: AppThemeColor.buttonColor,
+          backgroundColor: AppThemeColor.primaryColor,
           onPressed: () {},
 
         );
@@ -99,7 +101,7 @@ class WishListController extends GetxController{
       print("REMOVE  WISHLIST ERROR::::: $errorMessages");
       final snackBar = CustomSnackbar.build(
         message: errorMessages.toString(),
-        backgroundColor: AppThemeColor.buttonColor,
+        backgroundColor: AppThemeColor.primaryColor,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -110,7 +112,7 @@ class WishListController extends GetxController{
         log(wishListData.toString());
         final snackBar = CustomSnackbar.build(
           message: wishListData['message'].toString(),
-          backgroundColor: AppThemeColor.buttonColor,
+          backgroundColor: AppThemeColor.primaryColor,
           onPressed: () {},
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -120,22 +122,10 @@ class WishListController extends GetxController{
     }
   }
 
-
-  RxBool isLoading = false.obs;
-
-  void initializeClient() {
-    final HttpLink httpLink = HttpLink( 'https://ctshop.ssspl.net/graphql/');
-
-    client = GraphQLClient(
-      cache: GraphQLCache(store: InMemoryStore()),
-      link: httpLink,
-    );
-  }
-
-  late GraphQLClient client;
+  // late GraphQLClient client;
 
    Future<void> fetchWishlist() async {
-     initializeClient();
+    final GraphQLClient client = initializeClient();
      const String fetchFavProducts = """
     query Wishlist {
       getwishlist {
@@ -164,10 +154,10 @@ class WishListController extends GetxController{
         for (var item in wishlist) {
           getFavIds.add(item['product_id']);
         }
-        log("favorite IDs: $getFavIds");
+        // log("favorite IDs: $getFavIds");
       }
 
-      log("wish list data ${wishlist.toString()}");
+      // log("wish list data ${wishlist.toString()}");
     }
 
   }
@@ -273,7 +263,7 @@ class WishListController extends GetxController{
       print("ADD TO CART ERROR::::: $errorMessages");
       // final snackBar = CustomSnackbar.build(
       //   message: errorMessages.toString(),
-      //   backgroundColor: AppThemeColor.buttonColor,
+      //   backgroundColor: AppThemeColor.primaryColor,
       // );
       //
       // ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -285,8 +275,8 @@ class WishListController extends GetxController{
         await SharedPreferences.getInstance();
         cartLocalData.setString('cart_data', jsonEncode(addToCartData['cart']));
         cartController.getCartDataLocally();
-        showAddToCartPopup(context, "Item added to cart!");
-
+        // showAddToCartPopup(context, "Item added to cart!");
+         showSnackBarView(context, "Product added to cart successfully", Colors.black);
         // }
       } else {
         print('Add to cart error: Invalid response data');
@@ -298,8 +288,8 @@ class WishListController extends GetxController{
   @override
   void onInit() {
     super.onInit();
-    initializeClient();
-    fetchWishlist();
+    // initializeClient();
+    // fetchWishlist();
   }
 }
 

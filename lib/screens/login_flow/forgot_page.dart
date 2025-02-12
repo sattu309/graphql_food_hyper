@@ -26,7 +26,8 @@ class _ForgotpageState extends State<Forgotpage> {
     return Scaffold(
       body:
       Container(
-          color: AppThemeColor.buttonColor,
+        width: width,
+          color: Colors.white,
           child:
           Stack(
             children: [
@@ -34,9 +35,11 @@ class _ForgotpageState extends State<Forgotpage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: height*.13,),
-                  Padding(
-                    padding: const EdgeInsets.all(50.0),
-                    child: Image.asset("assets/images/food_logo.png",),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Image.asset("assets/images/food_logo.png",),
+                    ),
                   ),
                 ],
               ),
@@ -45,8 +48,14 @@ class _ForgotpageState extends State<Forgotpage> {
                 child:   Container(
                   width: width,
                   //padding: EdgeInsets.symmetric(horizontal: 35,vertical: 7),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration:  BoxDecoration(
+                    color: AppThemeColor.primaryColor,
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [ Colors.white,Color(0xfffc8907),],
+                      // colors: [Color(0xfffc8907), Color(0xfff75f11)],
+                    ),
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(20),
                       topLeft: Radius.circular(20),

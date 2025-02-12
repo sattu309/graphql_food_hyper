@@ -24,10 +24,10 @@ class _PriceRangeSliderState extends State<PriceRangeSlider> {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 1.0,
-            activeTrackColor: AppThemeColor.buttonColor,
+            activeTrackColor: AppThemeColor.primaryColor,
             inactiveTrackColor: Colors.grey,
-            thumbColor: AppThemeColor.buttonColor,
-            overlayColor: AppThemeColor.buttonColor.withAlpha(32),
+            thumbColor: AppThemeColor.primaryColor,
+            overlayColor: AppThemeColor.primaryColor.withAlpha(32),
             thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0,elevation: 2),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 24.0),
           ),

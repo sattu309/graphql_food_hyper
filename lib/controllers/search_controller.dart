@@ -1,17 +1,21 @@
-
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
+import '../components/graphql_client.dart';
+
 class ProductSearchController extends GetxController{
   final TextEditingController keyWordText= TextEditingController();
   var getSearchData = [].obs;
-
+  var itemData = [].obs;
+  RxBool isLoading = false.obs;
   Future<void> searchMutation(String keyWord,context) async {
-    final MutationOptions options = MutationOptions(
-      document: gql('''
+    final GraphQLClient client = initializeClient();
+     isLoading.value = true;
+    try{
+      final MutationOptions options = MutationOptions(
+        document: gql('''
   query Products(\$search: String!) {
         products(where: { search: \$search }) {
         edges {
@@ -54,44 +58,51 @@ class ProductSearchController extends GetxController{
 }
 
   '''),
-      variables: {
-        'search': keyWord,
-      },
-    );
+        variables: {
+          'search': keyWord,
+        },
+      );
 
-    final GraphQLClient client = GraphQLProvider.of(context).value;
+      final QueryResult result = await client.mutate(options);
 
-    final QueryResult result = await client.mutate(options);
+      if (result.hasException) {
+        List<String> errorMessages = [];
 
-    if (result.hasException) {
-      List<String> errorMessages = [];
+        if (result.exception!.graphqlErrors.isNotEmpty) {
+          errorMessages =
+              result.exception!.graphqlErrors.map((e) => e.message).toList();
+        }
 
-      if (result.exception!.graphqlErrors.isNotEmpty) {
-        errorMessages =
-            result.exception!.graphqlErrors.map((e) => e.message).toList();
+        if (result.exception!.linkException != null) {
+          errorMessages.add(result.exception!.linkException.toString());
+        }
+        print("Search ERROR::::: $errorMessages");
+
       }
+      else {
+        final List<dynamic>? searchData = result.data?['products']['edges'];
+        if (searchData != null) {
+          getSearchData.value = searchData;
+          isLoading.value = false;
+          print("SEARCH RESPONSE $getSearchData}");
 
-      if (result.exception!.linkException != null) {
-        errorMessages.add(result.exception!.linkException.toString());
+        } else {
+          print('SEARCH RESPONSE: Invalid response data');
+        }
       }
-      print("Search ERROR::::: $errorMessages");
-
-    } else {
-      final List<dynamic>? searchData = result.data?['products']['edges'];
-
-      if (searchData != null) {
-        getSearchData.value = searchData;
-        print("SEARCH RESPONSE ${getSearchData}}");
-
-      } else {
-        print('SEARCH RESPONSE: Invalid response data');
-      }
+    }catch(e){
+      print("Exception during search: $e");
+    }finally {
+      isLoading.value = false; // Set loading to false when search ends
     }
   }
   Timer? debounce;
   void onSearchChanged(String query, BuildContext context) {
-    if (debounce?.isActive ?? false) debounce!.cancel();
-    debounce = Timer(Duration(milliseconds: 500), () {
+    if (debounce?.isActive ?? false) {
+      debounce!.cancel();
+    }
+    getSearchData.clear();
+    debounce = Timer(const Duration(microseconds: 200), () {
       searchMutation(query, context);
     });
   }
